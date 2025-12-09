@@ -9,7 +9,7 @@
     "serve": "vite preview",
     "lint": "npx eslint ./src || exit 0",
     "lint:fix": "npx eslint ./src --fix || exit 0",
-    "start": "vite preview --port $PORT --host"
+    "start": "serve -s dist -l $PORT"
   },
   "contributors": [
     "Johan Leitet <johan.leitet@lnu.se>",
@@ -23,6 +23,7 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "serve": "^14.2.5"
   }
 }
