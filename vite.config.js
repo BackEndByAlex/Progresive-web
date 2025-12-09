@@ -1,9 +1,7 @@
-import { defineConfig } from "vite"
-
-export default defineConfig({
+export default {
   root: "src",
   build: {
     outDir: "../dist",
-    emptyOutDir: true,
+    target: "esnext",
   },
-})
+}
