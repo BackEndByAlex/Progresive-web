@@ -1,4 +1,4 @@
-import { MemoryMenuCSS } from './memory.menu.css'
+import { MemoryMenuCSS } from "./memory.menu.css.js"
 
 /**
  * MemoryMenu class that extends HTMLElement.
@@ -8,9 +8,9 @@ export default class MemoryMenu extends HTMLElement {
   /**
    * Creates an instance of MemoryMenu and initializes the shadow DOM.
    */
-  constructor () {
+  constructor() {
     super()
-    this.attachShadow({ mode: 'open' })
+    this.attachShadow({ mode: "open" })
     this.shadowRoot.append(MemoryMenuCSS.content.cloneNode(true))
     this.shadowRoot.innerHTML = `
        ${MemoryMenuCSS.innerHTML}
@@ -28,18 +28,22 @@ export default class MemoryMenu extends HTMLElement {
    * Called when the element is connected to the document's DOM.
    * Adds event listeners to the buttons in the menu.
    */
-  connectedCallback () {
-    this.shadowRoot.querySelectorAll('.level-btn').forEach(btn =>
-      btn.addEventListener('click', e => {
-        const level = e.target.getAttribute('data-level')
-        this.dispatchEvent(new CustomEvent('menu-selected', { detail: { level } }))
+  connectedCallback() {
+    this.shadowRoot.querySelectorAll(".level-btn").forEach((btn) =>
+      btn.addEventListener("click", (e) => {
+        const level = e.target.getAttribute("data-level")
+        this.dispatchEvent(
+          new CustomEvent("menu-selected", { detail: { level } })
+        )
       })
     )
 
-    this.shadowRoot.querySelector('.highscore-btn').addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('menu-highscores'))
-    })
+    this.shadowRoot
+      .querySelector(".highscore-btn")
+      .addEventListener("click", () => {
+        this.dispatchEvent(new CustomEvent("menu-highscores"))
+      })
   }
 }
 
-customElements.define('memory-menu', MemoryMenu)
+customElements.define("memory-menu", MemoryMenu)

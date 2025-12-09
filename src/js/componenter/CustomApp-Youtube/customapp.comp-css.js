@@ -1,4 +1,4 @@
-const CompYoutubeCSS = document.createElement('template')
+const CompYoutubeCSS = document.createElement("template")
 CompYoutubeCSS.innerHTML = `
   <style>
     header {

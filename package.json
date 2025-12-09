@@ -8,7 +8,8 @@
     "dev": "vite",
     "serve": "vite preview",
     "lint": "npx eslint ./src || exit 0",
-    "lint:fix": "npx eslint ./src --fix || exit 0"
+    "lint:fix": "npx eslint ./src --fix || exit 0",
+    "start": "vite preview --port $PORT --host"
   },
   "contributors": [
     "Johan Leitet <johan.leitet@lnu.se>",
