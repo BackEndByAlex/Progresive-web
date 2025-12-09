@@ -1,5 +1,5 @@
-import CompYoutubeCSS from './customapp.comp-css.js'
-import CompYoutubeHTML from './customapp.comp-html.js'
+import CompYoutubeCSS from "./customapp.comp-css.js"
+import CompYoutubeHTML from "./customapp.comp-html.js"
 
 /**
  * Custom element for YouTube search and video playback.
@@ -9,17 +9,17 @@ export default class CustomYoutube extends HTMLElement {
    * Creates an instance of CustomYoutube and attaches shadow DOM.
    * Appends the CSS and HTML templates to the shadow DOM.
    */
-  constructor () {
+  constructor() {
     super()
     this.cache = new Map()
     this.requestCount = 0
 
-    const shadow = this.attachShadow({ mode: 'open' })
+    const shadow = this.attachShadow({ mode: "open" })
     shadow.appendChild(CompYoutubeCSS.content.cloneNode(true))
     shadow.appendChild(CompYoutubeHTML.content.cloneNode(true))
 
-    shadow.querySelector('#searchButton').addEventListener('click', () => {
-      const query = this.shadowRoot.querySelector('#searchInput').value
+    shadow.querySelector("#searchButton").addEventListener("click", () => {
+      const query = this.shadowRoot.querySelector("#searchInput").value
       this.searchYoutube(query, shadow)
     })
   }
@@ -33,7 +33,7 @@ export default class CustomYoutube extends HTMLElement {
    * @param {ShadowRoot} shadow - The shadow DOM root.
    * @returns {Promise<void>} - A promise that resolves when the search is complete.
    */
-  async searchYoutube (query, shadow) {
+  async searchYoutube(query, shadow) {
     const cachedData = this.getFromLocalStorage(query)
     if (this.cache.has(query)) {
       this.cache.get(query, cachedData)
@@ -41,8 +41,10 @@ export default class CustomYoutube extends HTMLElement {
     }
 
     this.requestCount += 100
-    const apiKey = 'AIzaSyBv6Jveuho7NPECMdN-pQdViPiMrrpZvBg' // API-nyckel
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${apiKey}&fields=items(id(videoId),snippet(title,thumbnails))`
+    const apiKey = process.env.API_KEY
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
+      query
+    )}&key=${apiKey}&fields=items(id(videoId),snippet(title,thumbnails))`
 
     try {
       const response = await fetch(url)
@@ -53,7 +55,7 @@ export default class CustomYoutube extends HTMLElement {
 
       return this.updateVideoList(data.items, shadow)
     } catch (error) {
-      console.alert('Failed to fetch videos. Please try again later.')
+      console.alert("Failed to fetch videos. Please try again later.")
     }
   }
 
@@ -64,7 +66,7 @@ export default class CustomYoutube extends HTMLElement {
    * @param {string} query - The search query.
    * @param {object} data - The data to be saved.
    */
-  saveToLocalStorage (query, data) {
+  saveToLocalStorage(query, data) {
     const cachedData = { data, timestamp: Date.now() }
     localStorage.setItem(query, JSON.stringify(cachedData))
   }
@@ -76,7 +78,7 @@ export default class CustomYoutube extends HTMLElement {
    * @param {string} query - The search query.
    * @returns {object|null} - The cached data or null if not found or expired.
    */
-  getFromLocalStorage (query) {
+  getFromLocalStorage(query) {
     const cachedData = localStorage.getItem(query)
     if (!cachedData) return null
 
@@ -85,7 +87,7 @@ export default class CustomYoutube extends HTMLElement {
     // Kontrollera om cache-data är för gammal (1 timme i detta fall)
     const cacheTimeout = 3600 * 1000 // 1 timme i millisekunder
     if (Date.now() - parsedData.timestamp > cacheTimeout) {
-      console.log('Cache har gått ut för denna fråga.')
+      console.log("Cache har gått ut för denna fråga.")
       localStorage.removeItem(query)
       return null
     }
@@ -100,19 +102,19 @@ export default class CustomYoutube extends HTMLElement {
    * @function updateVideoList
    * @param {Array} videos - An array of video objects to display.
    */
-  updateVideoList (videos) {
-    const videoListElement = this.shadowRoot.querySelector('#videoList')
-    videoListElement.innerHTML = ''
+  updateVideoList(videos) {
+    const videoListElement = this.shadowRoot.querySelector("#videoList")
+    videoListElement.innerHTML = ""
 
-    videos.forEach(video => {
-      const videoElement = document.createElement('div')
-      videoElement.className = 'video-item'
+    videos.forEach((video) => {
+      const videoElement = document.createElement("div")
+      videoElement.className = "video-item"
       videoElement.innerHTML = `
         <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
         <h3>${video.snippet.title}</h3>
       `
 
-      videoElement.addEventListener('click', () => {
+      videoElement.addEventListener("click", () => {
         this.playVideo(video.id.videoId)
       })
       videoListElement.appendChild(videoElement)
@@ -126,8 +128,8 @@ export default class CustomYoutube extends HTMLElement {
    * @function playVideo - Plays the selected video in the player container.
    * @param {string} videoId - The ID of the video to play.
    */
-  playVideo (videoId) {
-    const playerContainer = this.shadowRoot.querySelector('#playerContainer')
+  playVideo(videoId) {
+    const playerContainer = this.shadowRoot.querySelector("#playerContainer")
     playerContainer.innerHTML = `
     <iframe
       width="100%"
@@ -140,4 +142,4 @@ export default class CustomYoutube extends HTMLElement {
   }
 }
 
-customElements.define('youtube-app', CustomYoutube)
+customElements.define("youtube-app", CustomYoutube)

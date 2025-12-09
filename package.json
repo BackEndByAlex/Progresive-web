@@ -6,7 +6,6 @@
   "browser": "src/js/index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "serve": "vite preview",
     "lint": "npx eslint ./src || exit 0",
     "lint:fix": "npx eslint ./src --fix || exit 0"
@@ -21,5 +20,8 @@
   "devDependencies": {
     "@lnu/eslint-config": "^1.1.10",
     "vite": "^4.4.9"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }
